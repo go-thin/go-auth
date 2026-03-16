@@ -1,4 +1,4 @@
-# 🔐 go-auth v2.0.0: Modern Authentication for Go
+# go-auth v2.0.0: Modern Authentication for Go
 
 [![Go Version](https://img.shields.io/badge/Go-%3E%3D%201.19-blue.svg)](https://golang.org/)
 [![Version](https://img.shields.io/github/v/tag/pragneshbagary/go-auth?label=version&color=green)](https://github.com/pragneshbagary/go-auth/releases)
@@ -10,32 +10,32 @@
 
 **A production-ready, feature-rich authentication library for Go applications with zero breaking changes from v1.**
 
-## 🌟 Why Choose go-auth v2?
+## Why Choose go-auth v2?
 
-- **🚀 Production Ready**: Used in production with comprehensive testing
-- **🔒 Security First**: Built with security best practices and regular audits
-- **📈 Scalable**: Designed for high-performance applications
-- **🛠️ Developer Friendly**: Intuitive API with excellent documentation
-- **🔄 Future Proof**: Regular updates and active maintenance
-- **🌍 Community Driven**: Open source with active community support
-- **⚡ Zero Downtime Migration**: Upgrade from v1 without breaking changes
+- **Production Ready**: Used in production with comprehensive testing
+- **Security First**: Built with security best practices and regular audits
+- **Scalable**: Designed for high-performance applications
+- **Developer Friendly**: Intuitive API with excellent documentation
+- **Future Proof**: Regular updates and active maintenance
+- **Community Driven**: Open source with active community support
+- **Zero Downtime Migration**: Upgrade from v1 without breaking changes
 
 ---
 
-## 🚀 What's New in v2.0.0
+## What's New in v2.0.0
 
-- ✨ **Simplified API** with intuitive constructors
-- 🏗️ **Component-based architecture** (Users, Tokens, Middleware)
-- 🔧 **Enhanced configuration** with environment variable support
-- 🚀 **Framework-specific middleware** (Gin, Echo, Fiber)
-- 📊 **Built-in monitoring, metrics, and health checks**
-- 🔒 **Advanced security features** and best practices
-- 🔄 **Automatic database migration** system
-- 📚 **Comprehensive documentation** and examples
-- 🔙 **Full backward compatibility** with v1
-- 🛠️ **Automated migration tools**
+- **Simplified API** with intuitive constructors
+- **Component-based architecture** (Users, Tokens, Middleware)
+- **Enhanced configuration** with environment variable support
+- **Framework-specific middleware** (Gin, Echo, Fiber)
+- **Built-in monitoring, metrics, and health checks**
+- **Advanced security features** and best practices
+- **Automatic database migration** system
+- **Comprehensive documentation** and examples
+- **Full backward compatibility** with v1
+- **Automated migration tools**
 
-**🎉 Zero Breaking Changes!** Your existing v1 code continues to work without modification.
+**Zero Breaking Changes!** Your existing v1 code continues to work without modification.
 
 ### v1 vs v2 Comparison
 
@@ -54,7 +54,7 @@
 
 ---
 
-## 📦 Installation
+## Installation
 
 ```bash
 go get github.com/pragneshbagary/go-auth@v2.0.0
@@ -68,7 +68,7 @@ go get github.com/pragneshbagary/go-auth@v2.0.0
 
 ---
 
-## ⚡ Quick Start
+## Quick Start
 
 ### Simple Setup (New v2 API)
 
@@ -145,7 +145,7 @@ authService, err := auth.NewFromEnv()
 
 ---
 
-## 🏗️ Component-Based Architecture
+## Component-Based Architecture
 
 ### Users Component
 
@@ -207,7 +207,7 @@ err = tokens.CleanupExpired()
 
 ---
 
-## 🚀 Framework Integration
+## Framework Integration
 
 ### Gin
 
@@ -282,7 +282,7 @@ mux.Handle("/optional", authService.Optional(optionalHandler))
 
 ---
 
-## 🔧 Configuration Options
+## Configuration Options
 
 ### Environment Variables
 
@@ -327,7 +327,7 @@ authService, err := auth.NewWithConfig(config)
 
 ---
 
-## 📊 Monitoring & Health Checks
+## Monitoring & Health Checks
 
 ```go
 // Health checks
@@ -360,7 +360,7 @@ mux.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 
 ---
 
-## 🗄️ Database Support
+## Database Support
 
 ### SQLite (Default)
 
@@ -382,7 +382,7 @@ authService, err := auth.NewInMemory("jwt-secret")
 
 ---
 
-## 🔄 Migration from v1
+## Migration from v1
 
 ### Automatic Compatibility
 
@@ -416,7 +416,7 @@ See the comprehensive [Migration Guide](MIGRATION.md) for detailed instructions.
 
 ---
 
-## 📚 Examples
+## Examples
 
 Explore the comprehensive examples:
 
@@ -431,7 +431,7 @@ Explore the comprehensive examples:
 
 ---
 
-## 🔒 Security Features
+## Security Features
 
 - **Argon2id Password Hashing** - Industry-standard secure hashing
 - **JWT with Refresh Tokens** - Secure token-based authentication
@@ -444,7 +444,7 @@ Explore the comprehensive examples:
 
 ---
 
-## 🚀 Performance
+## Performance
 
 - **Connection Pooling** - Automatic database connection management
 - **Batch Operations** - Efficient batch token validation
@@ -454,7 +454,7 @@ Explore the comprehensive examples:
 
 ---
 
-## 🧪 Testing
+## Testing
 
 Run the comprehensive test suite:
 
@@ -488,7 +488,7 @@ go test ./pkg/auth -run TestPerformance
 
 ---
 
-## 📖 Documentation
+## Documentation
 
 - [API Documentation](https://pkg.go.dev/github.com/pragneshbagary/go-auth)
 - [Migration Guide](MIGRATION.md)
@@ -497,7 +497,7 @@ go test ./pkg/auth -run TestPerformance
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcomed! Please see [Contributing Guide](CONTRIBUTING.md) for details.
 
@@ -509,24 +509,24 @@ Contributions are welcomed! Please see [Contributing Guide](CONTRIBUTING.md) for
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-## � Changelog
+## Changelog
 
 ### v2.0.0 (Latest)
-- ✨ **New**: Component-based architecture (Users, Tokens, Middleware)
-- ✨ **New**: Framework-specific middleware (Gin, Echo, Fiber)
-- ✨ **New**: Environment-based configuration
-- ✨ **New**: Built-in monitoring and metrics
-- ✨ **New**: Automated migration tools
-- ✨ **New**: Advanced security features
-- ✨ **New**: Performance optimizations
-- 🔙 **Backward Compatible**: All v1 APIs continue to work
-- 📚 **Documentation**: Comprehensive examples and guides
+- **New**: Component-based architecture (Users, Tokens, Middleware)
+- **New**: Framework-specific middleware (Gin, Echo, Fiber)
+- **New**: Environment-based configuration
+- **New**: Built-in monitoring and metrics
+- **New**: Automated migration tools
+- **New**: Advanced security features
+- **New**: Performance optimizations
+- **Backward Compatible**: All v1 APIs continue to work
+- **Documentation**: Comprehensive examples and guides
 
 ### v1.x
 - Basic authentication functionality
@@ -537,14 +537,14 @@ This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-## 📞 Support
+## Support
 
-- 📖 [Documentation](https://pkg.go.dev/github.com/pragneshbagary/go-auth)
-- 🐛 [Issue Tracker](https://github.com/pragneshbagary/go-auth/issues)
-- 💬 [Discussions](https://github.com/pragneshbagary/go-auth/discussions)
-- 📧 [Email Support](mailto:pragneshbagary1699@gmail.com)
-- 🚀 [Migration Guide](MIGRATION.md) - Upgrade from v1 to v2
+- [Documentation](https://pkg.go.dev/github.com/pragneshbagary/go-auth)
+- [Issue Tracker](https://github.com/pragneshbagary/go-auth/issues)
+- [Discussions](https://github.com/pragneshbagary/go-auth/discussions)
+- [Email Support](mailto:pragneshbagary1699@gmail.com)
+- [Migration Guide](MIGRATION.md) - Upgrade from v1 to v2
 
 ---
 
-**⭐ If you find go-auth useful, please consider giving it a star on GitHub!**
+**If you find go-auth useful, please consider giving it a star on GitHub!**
