@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	goevents "github.com/go-thin/go-events"
-	"github.com/pragneshbagary/go-auth/pkg/models"
+	"github.com/go-thin/go-auth/pkg/models"
 )
 
 // recordingBus captures every event passed to Publish.

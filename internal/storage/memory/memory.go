@@ -3,8 +3,8 @@ package memory
 import (
 	"sync"
 
-	"github.com/pragneshbagary/go-auth/pkg/models"
-	"github.com/pragneshbagary/go-auth/pkg/storage"
+	"github.com/go-thin/go-auth/pkg/models"
+	"github.com/go-thin/go-auth/pkg/storage"
 )
 
 // InMemoryStorage is a thread-safe in-memory implementation of storage.Storage.

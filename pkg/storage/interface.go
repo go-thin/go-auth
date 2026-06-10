@@ -3,7 +3,7 @@ package storage
 import (
 	"errors"
 
-	"github.com/pragneshbagary/go-auth/pkg/models"
+	"github.com/go-thin/go-auth/pkg/models"
 )
 
 // ErrUserNotFound is returned when a requested user does not exist.

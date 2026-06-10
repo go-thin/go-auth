@@ -4,7 +4,7 @@ import (
 	"time"
 
 	goevents "github.com/go-thin/go-events"
-	"github.com/pragneshbagary/go-auth/pkg/storage"
+	"github.com/go-thin/go-auth/pkg/storage"
 )
 
 // SigningMethod defines the type for JWT signing methods.

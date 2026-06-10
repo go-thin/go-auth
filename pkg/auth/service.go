@@ -7,9 +7,9 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	goevents "github.com/go-thin/go-events"
-	"github.com/pragneshbagary/go-auth/internal/jwtutils"
-	"github.com/pragneshbagary/go-auth/pkg/models"
-	"github.com/pragneshbagary/go-auth/pkg/storage"
+	"github.com/go-thin/go-auth/internal/jwtutils"
+	"github.com/go-thin/go-auth/pkg/models"
+	"github.com/go-thin/go-auth/pkg/storage"
 
 	"github.com/google/uuid"
 )
