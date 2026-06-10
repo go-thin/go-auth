@@ -3,6 +3,7 @@ package auth
 import (
 	"time"
 
+	goevents "github.com/go-thin/go-events"
 	"github.com/pragneshbagary/go-auth/pkg/storage"
 )
 
@@ -28,6 +29,7 @@ type JWTConfig struct {
 // Config is the main configuration struct for the AuthService.
 // It holds all the necessary components and settings.
 type Config struct {
-	Storage storage.Storage
-	JWT     JWTConfig
+	Storage  storage.Storage
+	JWT      JWTConfig
+	EventBus goevents.Bus // optional; nil disables event publishing
 }

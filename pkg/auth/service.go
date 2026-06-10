@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/golang-jwt/jwt/v5"
+	goevents "github.com/go-thin/go-events"
 	"github.com/pragneshbagary/go-auth/internal/jwtutils"
 	"github.com/pragneshbagary/go-auth/pkg/models"
 	"github.com/pragneshbagary/go-auth/pkg/storage"
@@ -18,11 +19,12 @@ import (
 type AuthService struct {
 	storage    storage.Storage
 	jwtManager jwtutils.TokenManager
+	eventBus   goevents.Bus
 }
 
-// NewAuthService creates a new AuthService from a configuration.
-// This is the main entry point for the library.
-func NewAuthService(cfg Config) (*AuthService, error) {
+// NewAuthServiceLegacy creates a new AuthService from a configuration.
+// Prefer auth.New, auth.NewSQLite, or auth.NewPostgres for new code.
+func NewAuthServiceLegacy(cfg Config) (*AuthService, error) {
 	// Internal validation of the config
 	if cfg.Storage == nil {
 		return nil, errors.New("storage implementation cannot be nil")
@@ -45,6 +47,7 @@ func NewAuthService(cfg Config) (*AuthService, error) {
 	return &AuthService{
 		storage:    cfg.Storage,
 		jwtManager: jwtManager,
+		eventBus:   cfg.EventBus,
 	}, nil
 }
 
@@ -83,6 +86,14 @@ func (s *AuthService) Register(payload RegisterPayload) (*models.User, error) {
 
 	if err := s.storage.CreateUser(newUser); err != nil {
 		return nil, fmt.Errorf("failed to create user: %w", err)
+	}
+
+	if s.eventBus != nil {
+		s.eventBus.Publish(UserRegistered{
+			UserID:   newUser.ID,
+			Username: newUser.Username,
+			Email:    newUser.Email,
+		})
 	}
 
 	return &newUser, nil
@@ -129,6 +140,13 @@ func (s *AuthService) Login(username, password string, customClaims map[string]i
 	refreshToken, err := s.jwtManager.GenerateRefreshToken(user.ID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate refresh token: %w", err)
+	}
+
+	if s.eventBus != nil {
+		s.eventBus.Publish(UserLoggedIn{
+			UserID:   user.ID,
+			Username: user.Username,
+		})
 	}
 
 	return &LoginResponse{
