@@ -28,7 +28,7 @@ func TestPasswordHashing(t *testing.T) {
 		}
 	})
 
-	t.Run("CheckPasswordHash", func(t *testing.T) {
+	t.Run("VerifyPassword", func(t *testing.T) {
 		password := "testpassword123"
 		
 		hash, err := HashPassword(password)
@@ -37,7 +37,7 @@ func TestPasswordHashing(t *testing.T) {
 		}
 		
 		// Correct password should verify
-		valid, err := CheckPasswordHash(password, hash)
+		valid, err := VerifyPassword(password, hash)
 		if err != nil {
 			t.Fatalf("Failed to check password hash: %v", err)
 		}
@@ -46,7 +46,7 @@ func TestPasswordHashing(t *testing.T) {
 		}
 		
 		// Wrong password should not verify
-		valid, err = CheckPasswordHash("wrongpassword", hash)
+		valid, err = VerifyPassword("wrongpassword", hash)
 		if err != nil {
 			t.Fatalf("Failed to check wrong password hash: %v", err)
 		}
@@ -55,7 +55,7 @@ func TestPasswordHashing(t *testing.T) {
 		}
 		
 		// Empty password should not verify
-		valid, err = CheckPasswordHash("", hash)
+		valid, err = VerifyPassword("", hash)
 		if err != nil {
 			t.Fatalf("Failed to check empty password hash: %v", err)
 		}
@@ -83,7 +83,7 @@ func TestPasswordHashing(t *testing.T) {
 		}
 		
 		// Both should verify correctly
-		valid, err := CheckPasswordHash(password, hash1)
+		valid, err := VerifyPassword(password, hash1)
 		if err != nil {
 			t.Fatalf("Failed to check first hash: %v", err)
 		}
@@ -91,7 +91,7 @@ func TestPasswordHashing(t *testing.T) {
 			t.Error("First hash should verify correctly")
 		}
 		
-		valid, err = CheckPasswordHash(password, hash2)
+		valid, err = VerifyPassword(password, hash2)
 		if err != nil {
 			t.Fatalf("Failed to check second hash: %v", err)
 		}
@@ -112,7 +112,7 @@ func TestPasswordHashing(t *testing.T) {
 		}
 		
 		// Empty password should verify against its hash
-		valid, err := CheckPasswordHash("", hash)
+		valid, err := VerifyPassword("", hash)
 		if err != nil {
 			t.Fatalf("Failed to check empty password: %v", err)
 		}
@@ -121,7 +121,7 @@ func TestPasswordHashing(t *testing.T) {
 		}
 		
 		// Non-empty password should not verify against empty password hash
-		valid, err = CheckPasswordHash("nonempty", hash)
+		valid, err = VerifyPassword("nonempty", hash)
 		if err != nil {
 			t.Fatalf("Failed to check non-empty password: %v", err)
 		}
@@ -139,7 +139,7 @@ func TestPasswordHashing(t *testing.T) {
 			t.Fatalf("Failed to hash long password: %v", err)
 		}
 		
-		valid, err := CheckPasswordHash(longPassword, hash)
+		valid, err := VerifyPassword(longPassword, hash)
 		if err != nil {
 			t.Fatalf("Failed to check long password: %v", err)
 		}
@@ -157,7 +157,7 @@ func TestPasswordHashing(t *testing.T) {
 			t.Fatalf("Failed to hash password with special characters: %v", err)
 		}
 		
-		valid, err := CheckPasswordHash(specialPassword, hash)
+		valid, err := VerifyPassword(specialPassword, hash)
 		if err != nil {
 			t.Fatalf("Failed to check special password: %v", err)
 		}
@@ -175,7 +175,7 @@ func TestPasswordHashing(t *testing.T) {
 			t.Fatalf("Failed to hash Unicode password: %v", err)
 		}
 		
-		valid, err := CheckPasswordHash(unicodePassword, hash)
+		valid, err := VerifyPassword(unicodePassword, hash)
 		if err != nil {
 			t.Fatalf("Failed to check Unicode password: %v", err)
 		}
@@ -199,7 +199,7 @@ func TestPasswordHashing(t *testing.T) {
 		}
 		
 		for _, invalidHash := range invalidHashes {
-			valid, err := CheckPasswordHash(password, invalidHash)
+			valid, err := VerifyPassword(password, invalidHash)
 			if err == nil && valid {
 				t.Errorf("Password should not verify against invalid hash: %s", invalidHash)
 			}
@@ -251,7 +251,7 @@ func TestPasswordHashing(t *testing.T) {
 		
 		// Verify multiple times
 		for i := 0; i < 10; i++ {
-			valid, err := CheckPasswordHash(password, hash)
+			valid, err := VerifyPassword(password, hash)
 			if err != nil {
 				t.Fatalf("Failed to check password on iteration %d: %v", i, err)
 			}
@@ -270,7 +270,7 @@ func TestPasswordHashing(t *testing.T) {
 		}
 		
 		// Correct case should verify
-		valid, err := CheckPasswordHash(password, hash)
+		valid, err := VerifyPassword(password, hash)
 		if err != nil {
 			t.Fatalf("Failed to check correct case password: %v", err)
 		}
@@ -279,7 +279,7 @@ func TestPasswordHashing(t *testing.T) {
 		}
 		
 		// Different case should not verify
-		valid, err = CheckPasswordHash("casesensitive123", hash)
+		valid, err = VerifyPassword("casesensitive123", hash)
 		if err != nil {
 			t.Fatalf("Failed to check lowercase password: %v", err)
 		}
@@ -287,7 +287,7 @@ func TestPasswordHashing(t *testing.T) {
 			t.Error("Different case password should not verify")
 		}
 		
-		valid, err = CheckPasswordHash("CASESENSITIVE123", hash)
+		valid, err = VerifyPassword("CASESENSITIVE123", hash)
 		if err != nil {
 			t.Fatalf("Failed to check uppercase password: %v", err)
 		}

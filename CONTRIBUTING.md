@@ -6,7 +6,7 @@ Thank you for your interest in contributing to go-auth! We welcome contributions
 
 ### Prerequisites
 
-- Go 1.19 or higher
+- Go 1.21 or higher
 - Git
 - Basic understanding of Go and authentication concepts
 
@@ -140,7 +140,7 @@ func TestNewFeature(t *testing.T) {
 - Document all public functions and types
 - Include examples in documentation
 - Update README.md for significant changes
-- Add or update examples in the `examples/` directory
+
 
 ## 🐛 Reporting Issues
 
@@ -252,9 +252,7 @@ We welcome contributions in these areas:
 - **Documentation** - Improve guides and examples
 
 ### Medium Priority
-- **New storage backends** - Redis, MongoDB, etc.
-- **Additional middleware** - More framework support
-- **Monitoring integrations** - Prometheus, Grafana, etc.
+- **New storage backends** - PostgreSQL, SQLite, Redis, etc.
 - **Testing improvements** - Better test coverage
 
 ### Low Priority

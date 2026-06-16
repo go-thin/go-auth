@@ -14,17 +14,16 @@ import (
 	"github.com/google/uuid"
 )
 
-// AuthService provides high-level authentication operations.
+// Service provides high-level authentication operations.
 // It orchestrates user storage, password hashing, and token generation.
-type AuthService struct {
+type Service struct {
 	storage    storage.Storage
 	jwtManager jwtutils.TokenManager
 	eventBus   goevents.Bus
 }
 
-// NewAuthServiceLegacy creates a new AuthService from a configuration.
-// Prefer auth.New, auth.NewSQLite, or auth.NewPostgres for new code.
-func NewAuthServiceLegacy(cfg Config) (*AuthService, error) {
+// New creates a new Service from a configuration.
+func New(cfg Config) (*Service, error) {
 	// Internal validation of the config
 	if cfg.Storage == nil {
 		return nil, errors.New("storage implementation cannot be nil")
@@ -44,7 +43,7 @@ func NewAuthServiceLegacy(cfg Config) (*AuthService, error) {
 		SigningMethod:   cfg.JWT.SigningMethod,
 	})
 
-	return &AuthService{
+	return &Service{
 		storage:    cfg.Storage,
 		jwtManager: jwtManager,
 		eventBus:   cfg.EventBus,
@@ -61,7 +60,7 @@ type RegisterPayload struct {
 
 // Register creates a new user, hashes their password, and saves them to storage.
 // It returns the newly created user.
-func (s *AuthService) Register(payload RegisterPayload) (*models.User, error) {
+func (s *Service) Register(payload RegisterPayload) (*models.User, error) {
 	// Basic validation (in a real app, you'd add more, e.g., password strength)
 	if payload.Username == "" || payload.Password == "" {
 		return nil, errors.New("username and password cannot be empty")
@@ -107,13 +106,13 @@ type LoginResponse struct {
 
 // Login authenticates a user and returns an access and refresh token pair.
 // It accepts customClaims to be embedded in the access token for authorization purposes.
-func (s *AuthService) Login(username, password string, customClaims map[string]interface{}) (*LoginResponse, error) {
+func (s *Service) Login(username, password string, customClaims map[string]interface{}) (*LoginResponse, error) {
 	user, err := s.storage.GetUserByUsername(username)
 	if err != nil {
 		return nil, errors.New("invalid username or password") // Generic error for security
 	}
 
-	match, err := CheckPasswordHash(password, user.PasswordHash)
+	match, err := VerifyPassword(password, user.PasswordHash)
 	if err != nil {
 		log.Printf("error checking password hash for user %s: %v", username, err)
 		return nil, errors.New("invalid username or password")
@@ -157,12 +156,12 @@ func (s *AuthService) Login(username, password string, customClaims map[string]i
 
 // ValidateAccessToken validates an access token string.
 // It returns the claims if the token is valid, otherwise an error.
-func (s *AuthService) ValidateAccessToken(tokenString string) (jwt.MapClaims, error) {
+func (s *Service) ValidateAccessToken(tokenString string) (jwt.MapClaims, error) {
 	return s.jwtManager.ValidateAccessToken(tokenString)
 }
 
 // ValidateRefreshToken validates a refresh token string.
 // It returns the claims if the token is valid, otherwise an error.
-func (s *AuthService) ValidateRefreshToken(tokenString string) (jwt.MapClaims, error) {
+func (s *Service) ValidateRefreshToken(tokenString string) (jwt.MapClaims, error) {
 	return s.jwtManager.ValidateRefreshToken(tokenString)
 }

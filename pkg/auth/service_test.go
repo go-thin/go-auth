@@ -52,9 +52,9 @@ func (s *simpleStorage) GetUserByUsername(username string) (*models.User, error)
 	return u, nil
 }
 
-func newTestService(t *testing.T, bus goevents.Bus) *AuthService {
+func newTestService(t *testing.T, bus goevents.Bus) *Service {
 	t.Helper()
-	svc, err := NewAuthServiceLegacy(Config{
+	svc, err := New(Config{
 		Storage: newSimpleStorage(),
 		JWT: JWTConfig{
 			AccessSecret:  []byte("access-secret"),
@@ -64,7 +64,7 @@ func newTestService(t *testing.T, bus goevents.Bus) *AuthService {
 		EventBus: bus,
 	})
 	if err != nil {
-		t.Fatalf("NewAuthServiceLegacy: %v", err)
+		t.Fatalf("auth.New: %v", err)
 	}
 	return svc
 }

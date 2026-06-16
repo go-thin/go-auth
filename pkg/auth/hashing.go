@@ -54,9 +54,9 @@ func HashPassword(password string) (string, error) {
 	return encodedHash, nil
 }
 
-// CheckPasswordHash securely compares a plaintext password with a stored Argon2id hash.
+// VerifyPassword securely compares a plaintext password with a stored Argon2id hash.
 // It uses a constant-time comparison to prevent timing attacks.
-func CheckPasswordHash(password, encodedHash string) (bool, error) {
+func VerifyPassword(password, encodedHash string) (bool, error) {
 	// 1. Parse the encoded hash string to extract parameters, salt, and hash.
 	p, salt, hash, err := decodeHash(encodedHash)
 	if err != nil {
