@@ -13,4 +13,5 @@ var ErrUserNotFound = errors.New("user not found")
 type Storage interface {
 	CreateUser(user models.User) error
 	GetUserByUsername(username string) (*models.User, error)
+	DeleteUser(id string) error
 }
