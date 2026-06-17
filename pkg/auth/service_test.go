@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	goevents "github.com/go-thin/go-events"
 	"github.com/go-thin/go-auth/pkg/models"
+	goevents "github.com/go-thin/go-events"
 )
 
 // recordingBus captures every event passed to Publish.
@@ -59,7 +59,7 @@ func newTestService(t *testing.T, bus goevents.Bus) *Service {
 		JWT: JWTConfig{
 			AccessSecret:  []byte("access-secret"),
 			RefreshSecret: []byte("refresh-secret"),
-			SigningMethod:  HS256,
+			SigningMethod: HS256,
 		},
 		EventBus: bus,
 	})
@@ -112,6 +112,96 @@ func TestRegister_PublishesUserRegisteredEvent(t *testing.T) {
 	}
 	if e.UserID == "" {
 		t.Error("UserID is empty")
+	}
+}
+
+func TestRegister_UsesConfiguredArgon2Params(t *testing.T) {
+	store := newSimpleStorage()
+	params := &Argon2Params{
+		Memory:      32,
+		Iterations:  2,
+		Parallelism: 1,
+		SaltLength:  8,
+		KeyLength:   16,
+	}
+	svc, err := New(Config{
+		Storage: store,
+		JWT: JWTConfig{
+			AccessSecret:  []byte("access-secret"),
+			RefreshSecret: []byte("refresh-secret"),
+			SigningMethod: HS256,
+		},
+		Argon2Params: params,
+	})
+	if err != nil {
+		t.Fatalf("auth.New: %v", err)
+	}
+
+	if _, err := svc.Register(RegisterPayload{
+		Username: "custom",
+		Email:    "custom@example.com",
+		Password: "password123",
+	}); err != nil {
+		t.Fatalf("Register: %v", err)
+	}
+
+	user, err := store.GetUserByUsername("custom")
+	if err != nil {
+		t.Fatalf("GetUserByUsername: %v", err)
+	}
+
+	gotParams, _, _, err := decodeHash(user.PasswordHash)
+	if err != nil {
+		t.Fatalf("decodeHash: %v", err)
+	}
+
+	if *gotParams != *params {
+		t.Fatalf("argon2 params = %+v, want %+v", gotParams, params)
+	}
+
+	valid, err := VerifyPassword("password123", user.PasswordHash)
+	if err != nil {
+		t.Fatalf("VerifyPassword: %v", err)
+	}
+	if !valid {
+		t.Fatal("registered password should verify")
+	}
+}
+
+func TestRegister_UsesDefaultArgon2ParamsWhenConfigNil(t *testing.T) {
+	store := newSimpleStorage()
+	svc, err := New(Config{
+		Storage: store,
+		JWT: JWTConfig{
+			AccessSecret:  []byte("access-secret"),
+			RefreshSecret: []byte("refresh-secret"),
+			SigningMethod: HS256,
+		},
+	})
+	if err != nil {
+		t.Fatalf("auth.New: %v", err)
+	}
+
+	if _, err := svc.Register(RegisterPayload{
+		Username: "default",
+		Email:    "default@example.com",
+		Password: "password123",
+	}); err != nil {
+		t.Fatalf("Register: %v", err)
+	}
+
+	user, err := store.GetUserByUsername("default")
+	if err != nil {
+		t.Fatalf("GetUserByUsername: %v", err)
+	}
+
+	gotParams, _, _, err := decodeHash(user.PasswordHash)
+	if err != nil {
+		t.Fatalf("decodeHash: %v", err)
+	}
+
+	if *gotParams != *DefaultParams {
+		t.Fatalf("argon2 params = %+v, want %+v", gotParams, DefaultParams)
 	}
 }
 

@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/golang-jwt/jwt/v5"
-	goevents "github.com/go-thin/go-events"
 	"github.com/go-thin/go-auth/internal/jwtutils"
 	"github.com/go-thin/go-auth/pkg/models"
 	"github.com/go-thin/go-auth/pkg/storage"
+	goevents "github.com/go-thin/go-events"
+	"github.com/golang-jwt/jwt/v5"
 
 	"github.com/google/uuid"
 )
@@ -17,9 +17,10 @@ import (
 // Service provides high-level authentication operations.
 // It orchestrates user storage, password hashing, and token generation.
 type Service struct {
-	storage    storage.Storage
-	jwtManager jwtutils.TokenManager
-	eventBus   goevents.Bus
+	storage      storage.Storage
+	jwtManager   jwtutils.TokenManager
+	argon2Params *Argon2Params
+	eventBus     goevents.Bus
 }
 
 // New creates a new Service from a configuration.
@@ -44,9 +45,10 @@ func New(cfg Config) (*Service, error) {
 	})
 
 	return &Service{
-		storage:    cfg.Storage,
-		jwtManager: jwtManager,
-		eventBus:   cfg.EventBus,
+		storage:      cfg.Storage,
+		jwtManager:   jwtManager,
+		argon2Params: cfg.Argon2Params,
+		eventBus:     cfg.EventBus,
 	}, nil
 }
 
@@ -71,7 +73,7 @@ func (s *Service) Register(payload RegisterPayload) (*models.User, error) {
 		return nil, fmt.Errorf("user with username '%s' already exists", payload.Username)
 	}
 
-	passwordHash, err := HashPassword(payload.Password)
+	passwordHash, err := hashPasswordWithParams(payload.Password, s.argon2Params)
 	if err != nil {
 		return nil, fmt.Errorf("failed to hash password: %w", err)
 	}

@@ -3,8 +3,8 @@ package auth
 import (
 	"time"
 
-	goevents "github.com/go-thin/go-events"
 	"github.com/go-thin/go-auth/pkg/storage"
+	goevents "github.com/go-thin/go-events"
 )
 
 // SigningMethod defines the type for JWT signing methods.
@@ -29,7 +29,8 @@ type JWTConfig struct {
 // Config is the main configuration struct for the AuthService.
 // It holds all the necessary components and settings.
 type Config struct {
-	Storage  storage.Storage
-	JWT      JWTConfig
-	EventBus goevents.Bus // optional; nil disables event publishing
+	Storage      storage.Storage
+	JWT          JWTConfig
+	Argon2Params *Argon2Params // optional; nil uses DefaultParams
+	EventBus     goevents.Bus  // optional; nil disables event publishing
 }
