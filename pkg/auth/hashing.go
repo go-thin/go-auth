@@ -32,7 +32,14 @@ var DefaultParams = &Argon2Params{
 // HashPassword generates a secure Argon2id hash of a password.
 // The output format is a modular crypt format string containing all parameters.
 func HashPassword(password string) (string, error) {
-	p := DefaultParams
+	return hashPasswordWithParams(password, nil)
+}
+
+func hashPasswordWithParams(password string, params *Argon2Params) (string, error) {
+	p := params
+	if p == nil {
+		p = DefaultParams
+	}
 
 	// 1. Generate a cryptographically secure random salt.
 	salt := make([]byte, p.SaltLength)
