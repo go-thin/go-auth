@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/go-thin/go-auth/internal/storage/memory"
@@ -45,7 +44,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/register", registerHandler(svc))
 	mux.HandleFunc("/login", loginHandler(svc))
-	mux.HandleFunc("/protected", protectedHandler(svc))
+	mux.Handle("/protected", auth.Middleware(svc)(protectedHandler()))
 
 	log.Println("listening on http://localhost:8080")
 	log.Fatal(http.ListenAndServe(":8080", mux))
@@ -101,40 +100,20 @@ func loginHandler(svc *auth.Service) http.HandlerFunc {
 	}
 }
 
-func protectedHandler(svc *auth.Service) http.HandlerFunc {
+func protectedHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
 			writeError(w, http.StatusMethodNotAllowed, "use GET")
 			return
 		}
 
-		token, ok := bearerToken(r)
-		if !ok {
-			writeError(w, http.StatusUnauthorized, "missing Bearer token")
-			return
-		}
-
-		claims, err := svc.ValidateAccessToken(token)
-		if err != nil {
-			writeError(w, http.StatusUnauthorized, "invalid token")
-			return
-		}
+		claims, _ := auth.ClaimsFromContext(r.Context())
 
 		writeJSON(w, http.StatusOK, map[string]any{
 			"message": "welcome to the protected route",
 			"claims":  claims,
 		})
 	}
-}
-
-func bearerToken(r *http.Request) (string, bool) {
-	authHeader := r.Header.Get("Authorization")
-	if !strings.HasPrefix(authHeader, "Bearer ") {
-		return "", false
-	}
-
-	token := strings.TrimSpace(strings.TrimPrefix(authHeader, "Bearer "))
-	return token, token != ""
 }
 
 func writeJSON(w http.ResponseWriter, status int, value any) {
