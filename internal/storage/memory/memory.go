@@ -37,3 +37,15 @@ func (s *InMemoryStorage) GetUserByUsername(username string) (*models.User, erro
 	}
 	return &u, nil
 }
+
+func (s *InMemoryStorage) DeleteUser(id string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	for username, user := range s.users {
+		if user.ID == id {
+			delete(s.users, username)
+			return nil
+		}
+	}
+	return nil
+}
