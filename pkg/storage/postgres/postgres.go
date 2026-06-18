@@ -76,3 +76,11 @@ func (s *Store) GetUserByUsername(username string) (*models.User, error) {
 	}
 	return &u, nil
 }
+
+func (s *Store) DeleteUser(id string) error {
+	_, err := s.db.Exec(`DELETE FROM users WHERE id = $1`, id)
+	if err != nil {
+		return fmt.Errorf("postgres: delete user: %w", err)
+	}
+	return nil
+}

@@ -52,6 +52,16 @@ func (s *simpleStorage) GetUserByUsername(username string) (*models.User, error)
 	return u, nil
 }
 
+func (s *simpleStorage) DeleteUser(id string) error {
+	for username, user := range s.users {
+		if user.ID == id {
+			delete(s.users, username)
+			return nil
+		}
+	}
+	return nil
+}
+
 func newTestService(t *testing.T, bus goevents.Bus) *Service {
 	t.Helper()
 	svc, err := New(Config{

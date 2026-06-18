@@ -131,7 +131,7 @@ Both backends auto-create the `users` table on first open. `store.DB()` exposes 
 
 ## Implementing a custom storage backend
 
-Implement the two-method `storage.Storage` interface to plug in any other backend:
+Implement the three-method `storage.Storage` interface to plug in any other backend:
 
 ```go
 import (
@@ -143,6 +143,7 @@ type MyDB struct{}
 
 func (db *MyDB) CreateUser(user models.User) error                        { /* insert */ return nil }
 func (db *MyDB) GetUserByUsername(username string) (*models.User, error)  { /* select */ return nil, nil }
+func (db *MyDB) DeleteUser(id string) error                               { /* delete */ return nil }
 // Return storage.ErrUserNotFound when the user does not exist.
 ```
 
